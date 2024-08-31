@@ -2,7 +2,7 @@ import { useState } from 'react';
 import React from 'react';
 // import MintNft from '../component/mintnft'; 
 import SelectColor from '../component/selectcolor';
-import styles from '../styles/TripleHelix.module.css'; // CSSファイルをインポート
+import styles from '../styles/tripleHelix.module.css'; // CSSファイルをインポート
 
 interface Colors {
   hue1: number;
@@ -27,10 +27,12 @@ const TripleHelix = () => {
 
   return (
     <div className={styles.wrapper}>
-      <h1 style={{ color: "#fff", textAlign: "center", fontSize: "60px", margin: "0" }}>
+      <h1 style={{ marginTop: "50px", color: "#fff", textAlign: "center", fontSize: "60px", margin: "0" }}>
         TripleHelix
       </h1>
-      <SelectColor styles={styles} colors={colors} setColors={updateColor} />
+      <div className="selectcolor">
+        <SelectColor styles={styles} colors={colors} setColors={updateColor} />
+      </div>
     </div>
   );
 }

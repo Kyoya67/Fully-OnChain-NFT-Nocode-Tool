@@ -1,9 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import Sketch from '../component/sketch';
-
-// ReactP5Wrapperコンポーネントを動的にインポート
-const ReactP5Wrapper = dynamic(() => import('react-p5-wrapper').then((mod) => mod.ReactP5Wrapper), { ssr: false });
+import Sketch from './sketch'; // sketch.tsファイルのパスを適切に指定してください
 
 interface ColorProps {
   hue1: number;
@@ -18,15 +15,45 @@ interface SelectColorProps {
 }
 
 const SelectColor: React.FC<SelectColorProps> = ({ styles, colors, setColors }) => {
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const sketchRef = useRef<any>(null);
+
+  useEffect(() => {
+    let p5Instance: any = null;
+
+    const initializeSketch = async () => {
+      const p5 = await import('p5');
+      if (canvasRef.current && !sketchRef.current) {
+        p5Instance = new p5.default((p: any) => {
+          Sketch(p);
+          sketchRef.current = p; // p5インスタンスを参照として保存
+        }, canvasRef.current);
+      }
+    };
+
+    initializeSketch();
+
+    return () => {
+      if (p5Instance) {
+        p5Instance.remove();
+      }
+      sketchRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (sketchRef.current && sketchRef.current.updateWithProps) {
+      sketchRef.current.updateWithProps({
+        color1: colors.hue1,
+        color2: colors.hue2,
+        color3: colors.hue3,
+      });
+    }
+  }, [colors]);
+
   return (
     <div className={styles.container}>
-      <ReactP5Wrapper
-        sketch={Sketch}
-        color1={colors.hue1}
-        color2={colors.hue2}
-        color3={colors.hue3}
-      />
-      {/* 色相1のスライダー */}
+      <div ref={canvasRef}></div>
       <input
         className={styles.input}
         type="range"
@@ -37,7 +64,6 @@ const SelectColor: React.FC<SelectColorProps> = ({ styles, colors, setColors }) 
       />
       <label>Hue 1: {colors.hue1}</label>
 
-      {/* 色相2のスライダー */}
       <input
         className={styles.input}
         type="range"
@@ -48,7 +74,6 @@ const SelectColor: React.FC<SelectColorProps> = ({ styles, colors, setColors }) 
       />
       <label>Hue 2: {colors.hue2}</label>
 
-      {/* 色相3のスライダー */}
       <input
         className={styles.input}
         type="range"
@@ -62,4 +87,4 @@ const SelectColor: React.FC<SelectColorProps> = ({ styles, colors, setColors }) 
   );
 };
 
-export default SelectColor;
+export default dynamic(() => Promise.resolve(SelectColor), { ssr: false });
