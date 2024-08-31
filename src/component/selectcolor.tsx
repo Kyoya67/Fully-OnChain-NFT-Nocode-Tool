@@ -1,6 +1,9 @@
 import React from 'react';
-import { ReactP5Wrapper } from 'react-p5-wrapper';
+import dynamic from 'next/dynamic';
 import Sketch from '../component/sketch';
+
+// ReactP5Wrapperコンポーネントを動的にインポート
+const ReactP5Wrapper = dynamic(() => import('react-p5-wrapper').then((mod) => mod.ReactP5Wrapper), { ssr: false });
 
 interface ColorProps {
   hue1: number;

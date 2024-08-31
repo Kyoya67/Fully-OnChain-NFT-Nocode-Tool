@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import React from 'react';
-import MintNft from '../component/mintnft'; // MintNFTコンポーネントをインポート
+// import MintNft from '../component/mintnft'; 
 import SelectColor from '../component/selectcolor';
 import styles from '../styles/TripleHelix.module.css'; // CSSファイルをインポート
 
@@ -31,7 +31,6 @@ const TripleHelix = () => {
         TripleHelix
       </h1>
       <SelectColor styles={styles} colors={colors} setColors={updateColor} />
-      <MintNft styles={styles} colors={colors} />
     </div>
   );
 }
