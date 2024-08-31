@@ -17,7 +17,6 @@ const Sketch = (p: p5) => {
   let col3: p5.Color;
   let a = 0;
 
-  // Update properties method
   (p as any).updateWithProps = (newProps: SketchProps) => {
     if (newProps.color1 !== undefined) {
       col1 = p.color(newProps.color1, 100, 100);

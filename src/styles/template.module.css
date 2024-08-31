@@ -16,6 +16,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition-duration: 0.4s;
+}
+
+.item:hover {
+    scale: 1.05;
 }
 
 .image {
