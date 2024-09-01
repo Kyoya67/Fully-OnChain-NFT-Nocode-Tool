@@ -1,32 +1,19 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    /* changed from center to start alignment */
-    padding-top: 50px;
-    /* added space to the top */
-    /* background-color: #0081A7; */
-    color: #ffffff;
-    font-family: Arial, sans-serif;
+/* triplehelix.module.css */
+.wrapper {
+    position: relative;
+    height: 100vh; /* 画面全体の高さを指定 */
 }
 
-.input {
-    margin-top: 20px;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    width: 200px;
+.wrapper h1 {
+    margin-top: 50px;
+    color: #fff;
+    text-align: center;
+    font-size: 60px;
 }
 
-.button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 4px;
-    border: none;
-    background-color: #fff;
-    color: #000;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 20px;
+.selectcolor {
+    position: absolute;
+    top: 45%; /* 親要素の高さの50%の位置に配置 */
+    left: 50%; /* 親要素の幅の50%の位置に配置 */
+    transform: translate(-50%, -50%); /* 自分の幅と高さの50%分だけ左上に移動 */
 }

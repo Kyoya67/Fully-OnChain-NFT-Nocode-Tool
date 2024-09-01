@@ -2,7 +2,7 @@ import { useState } from 'react';
 import React from 'react';
 // import MintNft from '../component/mintnft'; 
 import SelectColor from '../component/selectcolor';
-import styles from '../styles/tripleHelix.module.css'; // CSSファイルをインポート
+import styles from '../styles/triplehelix.module.css';
 
 interface Colors {
   hue1: number;
@@ -17,7 +17,6 @@ const TripleHelix = () => {
     hue3: 0,
   });
 
-  // 更新関数を一つにまとめる
   const updateColor = (colorName: keyof Colors, value: number) => {
     setColors((prevColors) => ({
       ...prevColors,
@@ -27,11 +26,11 @@ const TripleHelix = () => {
 
   return (
     <div className={styles.wrapper}>
-      <h1 style={{ marginTop: "50px", color: "#fff", textAlign: "center", fontSize: "60px", margin: "0" }}>
+      <h1>
         TripleHelix
       </h1>
-      <div className="selectcolor">
-        <SelectColor styles={styles} colors={colors} setColors={updateColor} />
+      <div className={styles.selectcolor}>
+        <SelectColor colors={colors} setColors={updateColor} />
       </div>
     </div>
   );
