@@ -6,6 +6,8 @@ import styles from '../styles/selectcolor.module.css';
 import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
 import { config } from '../wagmi';
 import { abi, address } from '../abi/triplehelixABI';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ColorProps {
   hue1: number;
@@ -59,73 +61,107 @@ const SelectColor: React.FC<SelectColorProps> = ({ colors, setColors }) => {
   async function handleMint(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSendingTx(true);
-    
+
     try {
       const tx = await writeContract(config, {
         address: address,
-        abi,
+        abi: abi,
         functionName: 'nftMint',
         args: [colors.hue1, colors.hue2, colors.hue3],
       });
-      await waitForTransactionReceipt(config, { 
-        hash: tx 
+      const receipt = await waitForTransactionReceipt(config, {
+        hash: tx
       });
+
+      // OpenSeaのリンクを生成
+      const tokenIdHex = receipt.logs[0]?.topics[3];
+
+      if (tokenIdHex) {
+        // 16進数から10進数に変換
+        const tokenId = parseInt(tokenIdHex.toString().replace(/^0x/, ''), 16);
+
+        // OpenSeaのリンクを生成
+        const openSeaLink = `https://testnets.opensea.io/assets/sepolia/${address}/${tokenId}`;
+
+        // 完了メッセージとリンクをポップアップで表示
+        toast.success(
+          <div>
+            NFTが作成されました！<br />
+            <a href={openSeaLink} target="_blank" rel="noopener noreferrer">OpenSeaで確認する</a>
+          </div>,
+          { autoClose: 10000, position: "bottom-right" }
+        );
+      } else {
+        toast.error('トークンIDが取得できませんでした。', { position: "bottom-right" });
+      }
     } catch (error) {
       console.error('Error minting NFT:', error);
+      toast.error('NFTの作成中にエラーが発生しました。', { position: "bottom-right" });
     } finally {
       setIsSendingTx(false);
     }
   }
 
   return (
-    <form onSubmit={handleMint} className={styles.container}>
-      <div ref={canvasRef} className={styles.canvasWrapper}></div>
-      <div className={styles.inputWrapper}>
-        <div className={styles.inputGroup}>
-          <input
-            className={styles.input}
-            type="range"
-            min="0"
-            max="360"
-            value={colors.hue1}
-            onChange={(e) => setColors('hue1', parseInt(e.target.value, 10))}
-          />
-          <label>Hue 1: {colors.hue1}</label>
-        </div>
+    <>
+      <form onSubmit={handleMint} className={styles.container}>
+        <div ref={canvasRef} className={styles.canvasWrapper}></div>
+        <div className={styles.inputWrapper}>
+          <div className={styles.inputGroup}>
+            <input
+              className={styles.input}
+              type="range"
+              min="0"
+              max="360"
+              value={colors.hue1}
+              onChange={(e) => setColors('hue1', parseInt(e.target.value, 10))}
+            />
+            <label>Color 1: {colors.hue1}</label>
+          </div>
 
-        <div className={styles.inputGroup}>
-          <input
-            className={styles.input}
-            type="range"
-            min="0"
-            max="360"
-            value={colors.hue2}
-            onChange={(e) => setColors('hue2', parseInt(e.target.value, 10))}
-          />
-          <label>Hue 2: {colors.hue2}</label>
-        </div>
+          <div className={styles.inputGroup}>
+            <input
+              className={styles.input}
+              type="range"
+              min="0"
+              max="360"
+              value={colors.hue2}
+              onChange={(e) => setColors('hue2', parseInt(e.target.value, 10))}
+            />
+            <label>Color 2: {colors.hue2}</label>
+          </div>
 
-        <div className={styles.inputGroup}>
-          <input
-            className={styles.input}
-            type="range"
-            min="0"
-            max="360"
-            value={colors.hue3}
-            onChange={(e) => setColors('hue3', parseInt(e.target.value, 10))}
-          />
-          <label>Hue 3: {colors.hue3}</label>
-        </div>
+          <div className={styles.inputGroup}>
+            <input
+              className={styles.input}
+              type="range"
+              min="0"
+              max="360"
+              value={colors.hue3}
+              onChange={(e) => setColors('hue3', parseInt(e.target.value, 10))}
+            />
+            <label>Color 3: {colors.hue3}</label>
+          </div>
 
-        <button
-          className={styles.actionButton}
-          disabled={isSendingTx}
-          type="submit"
-        >
-          {isSendingTx ? 'Minting...' : 'Generate NFT'}
-        </button>
-      </div>
-    </form>
+          <div className={isSendingTx ? styles.loaderWrapper : ''}>
+            {isSendingTx && (
+              <>
+                <div className={styles.loader}></div>
+                <div className={styles.loadingMessage}>Minting...</div>
+              </>
+            )}
+            <button
+              className={isSendingTx ? styles.hidden : styles.actionButton}
+              disabled={isSendingTx}
+              type="submit"
+            >
+              {isSendingTx ? '' : 'Generate NFT'}
+            </button>
+          </div>
+        </div>
+      </form>
+      <ToastContainer position="bottom-right" />
+    </>
   );
 };
 

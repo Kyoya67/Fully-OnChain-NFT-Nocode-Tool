@@ -50,6 +50,15 @@
   color: #ffffff;
 }
 
+.loaderWrapper {
+  position: absolute;
+  top: 300px;
+  right: 60px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+}
+
 .loader {
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-left: 4px solid #000;
@@ -64,8 +73,10 @@
   100% { transform: rotate(360deg); }
 }
 
-.successMessage {
-  color: green;
-  font-weight: bold;
-  margin-top: 10px;
+.loadingMessage {
+  margin-left: 20px; 
+}
+
+.hidden {
+  display: none;
 }

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import React from 'react';
-// import MintNft from '../component/mintnft'; 
 import SelectColor from '../component/selectcolor';
 import styles from '../styles/triplehelix.module.css';
 
