@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Sketch from './sketch';
 import styles from '../styles/selectcolor.module.css';
-import { useWriteContract } from 'wagmi';
-import { abi, triplehelix_address } from '../abi/triplehelixABI';
+import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
+import { config } from '../wagmi';
+import { abi, address } from '../abi/triplehelixABI';
 
 interface ColorProps {
   hue1: number;
@@ -17,13 +19,11 @@ interface SelectColorProps {
 }
 
 const SelectColor: React.FC<SelectColorProps> = ({ colors, setColors }) => {
-  const canvasRef = useRef<HTMLDivElement>(null);
-  const sketchRef = useRef<any>(null);
-  const [loading, setLoading] = useState(false);
-  const [isMinted, setIsMinted] = useState(false);
-  const { writeContract } = useWriteContract();
+  const canvasRef = React.useRef<HTMLDivElement>(null);
+  const sketchRef = React.useRef<any>(null);
+  const [isSendingTx, setIsSendingTx] = useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     let p5Instance: any = null;
 
     const initializeSketch = async () => {
@@ -46,7 +46,7 @@ const SelectColor: React.FC<SelectColorProps> = ({ colors, setColors }) => {
     };
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (sketchRef.current && sketchRef.current.updateWithProps) {
       sketchRef.current.updateWithProps({
         color1: colors.hue1,
@@ -56,31 +56,31 @@ const SelectColor: React.FC<SelectColorProps> = ({ colors, setColors }) => {
     }
   }, [colors]);
 
-  const handleMint = async () => {
-    setLoading(true); // ロード中状態にする
-    setIsMinted(false); // NFTが成功するまで`isMinted`は`false`
-
+  async function handleMint(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsSendingTx(true);
+    
     try {
-      await writeContract({
+      const tx = await writeContract(config, {
+        address: address,
         abi,
-        address: triplehelix_address,
         functionName: 'nftMint',
         args: [colors.hue1, colors.hue2, colors.hue3],
       });
-      setIsMinted(true); // 成功したら`isMinted`を`true`にする
+      await waitForTransactionReceipt(config, { 
+        hash: tx 
+      });
     } catch (error) {
       console.error('Error minting NFT:', error);
-      setIsMinted(false); // エラーが発生した場合は`false`のまま
     } finally {
-      setLoading(false); // 成功・失敗に関わらず、ロード中状態を解除
+      setIsSendingTx(false);
     }
-  };
+  }
 
   return (
-    <div className={styles.container}>
+    <form onSubmit={handleMint} className={styles.container}>
       <div ref={canvasRef} className={styles.canvasWrapper}></div>
       <div className={styles.inputWrapper}>
-        {/* 既存の入力フィールド */}
         <div className={styles.inputGroup}>
           <input
             className={styles.input}
@@ -117,19 +117,15 @@ const SelectColor: React.FC<SelectColorProps> = ({ colors, setColors }) => {
           <label>Hue 3: {colors.hue3}</label>
         </div>
 
-        <div
+        <button
           className={styles.actionButton}
-          onClick={handleMint}
+          disabled={isSendingTx}
+          type="submit"
         >
-          {loading ? (
-            <div className={styles.loader}></div> // ロード中アニメーション
-          ) : (
-            'Generate NFT'
-          )}
-        </div>
-        {isMinted && <p>NFT minted successfully!</p>}
+          {isSendingTx ? 'Minting...' : 'Generate NFT'}
+        </button>
       </div>
-    </div>
+    </form>
   );
 };
 

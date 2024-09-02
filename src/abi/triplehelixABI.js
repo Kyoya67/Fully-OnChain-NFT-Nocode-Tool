@@ -430,4 +430,4 @@ export const abi = [
 	}
 ];
   
-  export const triplehelix_address = '0x9b513fD1Ea579aC2214Cf3db6F5B3E40b9D77630';
+  export const address = '0x9b513fD1Ea579aC2214Cf3db6F5B3E40b9D77630';
