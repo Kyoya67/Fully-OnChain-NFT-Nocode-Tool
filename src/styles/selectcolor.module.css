@@ -80,3 +80,9 @@
 .hidden {
   display: none;
 }
+
+.customToastContainer {
+  position: fixed;
+  bottom: -120px;
+  right: 0px;
+}

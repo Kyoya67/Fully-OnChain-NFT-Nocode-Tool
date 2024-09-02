@@ -160,7 +160,7 @@ const SelectColor: React.FC<SelectColorProps> = ({ colors, setColors }) => {
           </div>
         </div>
       </form>
-      <ToastContainer position="bottom-right" />
+      <ToastContainer className={styles.customToastContainer} />
     </>
   );
 };
