@@ -29,8 +29,19 @@ const Sketch = (p: p5) => {
     }
   };
 
+  const setCanvasSize = () => {
+    let canvasSize = 400; // デフォルトのキャンバスサイズ
+
+    // ウィンドウ幅が756px以下の場合にキャンバスサイズを小さくする
+    if (window.innerWidth <= 756) {
+      canvasSize = 300; // 小さくするサイズ
+    }
+
+    p.resizeCanvas(canvasSize, canvasSize);
+  };
+
   p.setup = () => {
-    p.createCanvas(400, 400);
+    setCanvasSize();
     p.background(0);
     p.colorMode(p.HSB);
     p.stroke(0, 100);
@@ -49,6 +60,10 @@ const Sketch = (p: p5) => {
       circles2[i] = new Cir(i, 2);
       circles3[i] = new Cir(i, 3);
     }
+  };
+
+  p.windowResized = () => {
+    setCanvasSize();
   };
 
   p.draw = () => {

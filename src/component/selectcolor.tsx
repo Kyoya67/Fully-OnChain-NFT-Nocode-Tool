@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Sketch from './sketch';
 import styles from '../styles/selectcolor.module.css';
@@ -160,7 +160,7 @@ const SelectColor: React.FC<SelectColorProps> = ({ colors, setColors }) => {
           </div>
         </div>
       </form>
-      <ToastContainer className={styles.customToastContainer} />
+      <ToastContainer className={styles.toast} />
     </>
   );
 };
