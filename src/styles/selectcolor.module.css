@@ -6,6 +6,7 @@
   padding: 20px;
   color: #ffffff;
   font-family: Arial, sans-serif;
+  position: relative;
 }
 
 .contentWrapper {
@@ -83,9 +84,10 @@
 }
 
 .toast {
-  position: fixed;
-  bottom: -120px;
-  right: 0px;
+  position: absolute;
+  top: 60vh;
+  left: 50vw;
+  z-index: 9999;
 }
 
 @media (max-width: 756px) {
@@ -109,6 +111,6 @@
 @media (min-width: 375px) and (max-width: 756px) {
   .toast {
     top: 75vh;
-    right: calc(100 * (756px - 100vw) / 200);
+    left: 50vw;
   }
 }
