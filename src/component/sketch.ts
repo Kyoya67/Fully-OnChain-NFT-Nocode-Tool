@@ -7,7 +7,7 @@ interface SketchProps {
 }
 
 const Sketch = (p: p5) => {
-  let size = 35;
+  let size: number;
   let num: number;
   let circles1: Cir[];
   let circles2: Cir[];
@@ -16,6 +16,7 @@ const Sketch = (p: p5) => {
   let col2: p5.Color;
   let col3: p5.Color;
   let a = 0;
+  let scaleFactor: number;
 
   (p as any).updateWithProps = (newProps: SketchProps) => {
     if (newProps.color1 !== undefined) {
@@ -38,22 +39,16 @@ const Sketch = (p: p5) => {
     }
 
     p.resizeCanvas(canvasSize, canvasSize);
+    scaleFactor = canvasSize / 300; // スケールファクターを計算
+    size = 35 * scaleFactor; // サイズをスケーリング
+    initializeCircles();
   };
 
-  p.setup = () => {
-    setCanvasSize();
-    p.background(0);
-    p.colorMode(p.HSB);
-    p.stroke(0, 100);
-
+  const initializeCircles = () => {
     num = p.width;
     circles1 = new Array(num);
     circles2 = new Array(num);
     circles3 = new Array(num);
-
-    col1 = p.color(0, 100, 100);
-    col2 = p.color(120, 100, 100);
-    col3 = p.color(240, 100, 100);
 
     for (let i = 0; i <= num; i++) {
       circles1[i] = new Cir(i, 1);
@@ -62,13 +57,26 @@ const Sketch = (p: p5) => {
     }
   };
 
+  p.setup = () => {
+    setCanvasSize();
+    p.background(0);
+    p.colorMode(p.HSB);
+    p.stroke(0, 100);
+
+    col1 = p.color(0, 100, 100);
+    col2 = p.color(120, 100, 100);
+    col3 = p.color(240, 100, 100);
+
+    initializeCircles();
+  };
+
   p.windowResized = () => {
     setCanvasSize();
   };
 
   p.draw = () => {
     p.background(0);
-    p.strokeWeight(0.5);
+    p.strokeWeight(0.5 * scaleFactor);
     p.noFill();
     for (let i = 0; i <= num; i++) {
       p.stroke(col1);
@@ -94,12 +102,13 @@ const Sketch = (p: p5) => {
     posx: number;
     posy: number;
     constructor(i: number, type: number) {
-      this.posx = i;
-      let theta = p.map(i, 0, p.width, 0, p.TAU);
-      if (type === 1) this.posy = p.height / 2 + 100 * p.sin(theta);
+      this.posx = i * scaleFactor;
+      let theta = p.map(i, 0, num, 0, p.TAU);
+      let amplitude = 100 * scaleFactor;
+      if (type === 1) this.posy = p.height / 2 + amplitude * p.sin(theta);
       else if (type === 2)
-        this.posy = p.height / 2 + 100 * p.sin(theta + (2 / 3) * p.PI);
-      else this.posy = p.height / 2 + 100 * p.sin(theta + (4 / 3) * p.PI);
+        this.posy = p.height / 2 + amplitude * p.sin(theta + (2 / 3) * p.PI);
+      else this.posy = p.height / 2 + amplitude * p.sin(theta + (4 / 3) * p.PI);
     }
   }
 };
