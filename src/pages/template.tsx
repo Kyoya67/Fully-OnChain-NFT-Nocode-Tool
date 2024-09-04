@@ -23,7 +23,7 @@ const Template = () => {
                 <Link href="/noisewave">
                     <div className={styles.item}>
                         <Image
-                            src="/NoiseWave.png"
+                            src="/noisewave.png"
                             alt="NoiseWave"
                             layout="responsive"
                             width={300}
@@ -36,7 +36,7 @@ const Template = () => {
                 <Link href="/fantasia">
                     <div className={styles.item}>
                         <Image
-                            src="/Fantasia.png"
+                            src="/fantasia.png"
                             alt="Fantasia"
                             layout="responsive"
                             width={300}
