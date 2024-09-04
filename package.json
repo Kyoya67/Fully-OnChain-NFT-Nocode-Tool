@@ -16,6 +16,7 @@
     "react-dom": "^18.3.0",
     "react-p5": "^1.4.1",
     "react-p5-wrapper": "^4.1.2",
+    "react-responsive-modal": "^6.4.2",
     "react-toastify": "^10.0.5",
     "viem": "^2.20.1",
     "wagmi": "^2.12.8"

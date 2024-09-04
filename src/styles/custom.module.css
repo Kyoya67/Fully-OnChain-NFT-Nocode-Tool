@@ -1,0 +1,140 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .main {
+    flex: 1;
+    padding: 2rem;
+    color: #ffffff;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .wrapper {
+    width: 85%;
+    margin: 0 auto;
+  }
+  
+  .createButton {
+    background-color: #375164;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 2rem;
+    transition: transform 0.4s, box-shadow 0.4s;
+  }
+  
+  .createButton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .collectionsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+  
+  .collectionCard {
+    background-color: #172a46;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .collectionCard:hover {
+    transform: translateY(-5px);
+  }
+  
+  .collectionCard h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .noCollections {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #ffffff;
+  }
+  
+  @media (max-width: 768px) {
+    .title {
+      font-size: 2rem;
+    }
+  
+    .collectionsGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* 既存のスタイルはそのままで、以下を追加 */
+
+.customModal {
+    background: #1a2a3a;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #375164;
+    background: #375164;
+    color: white;
+    border-radius: 5px;
+}
+
+.input::placeholder {
+    color: rgba(255, 255, 255, 0.537);
+}
+
+.radioGroup {
+    margin: 20px 0;
+}
+
+.radioGroup label {
+    margin-right: 10px;
+    color: white;
+    font-size: 1rem;
+}
+
+.radioGroup input[type="radio"] {
+    margin-right: 5px;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.submitButton {
+    background-color: #375164;
+    margin-top: 15px;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submitButton:hover {
+    background-color: #4a6a87;
+}
