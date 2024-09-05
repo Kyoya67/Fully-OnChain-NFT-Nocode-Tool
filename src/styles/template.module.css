@@ -1,8 +1,9 @@
 .title {
-    text-align: center;
     color: white;
-    font-size: 60px;
-    margin: 0;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: bold;
 }
 
 .container {
