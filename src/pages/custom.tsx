@@ -2,14 +2,23 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { readContract } from '@wagmi/core';
 import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
+import { useAccount } from 'wagmi'; // useAccount フックをインポート
 import { config } from '../wagmi';
-import { abi, address } from '../abi/factoryABI';
+import { abi as factoryABI, address as factoryAddress} from '../abi/factoryABI';
+import { abi as nftABI } from '../abi/nftABI';
 import { Modal } from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import styles from '../styles/custom.module.css';
 
+interface Collection {
+    name: string;
+    symbol: string;
+    fileType: string;
+    address: string;
+}
+
 const Custom = () => {
-    const [collections, setCollections] = useState([]);
+    const [collections, setCollections] = useState<Collection[]>([]);
     const [open, setOpen] = useState(false);
     const [collectionName, setCollectionName] = useState('');
     const [symbolName, setSymbolName] = useState('');
@@ -17,36 +26,7 @@ const Custom = () => {
     const [error, setError] = useState('');
     const [isSendingTx, setIsSendingTx] = useState(false);
 
-    useEffect(() => {
-        async function fetchCollections() {
-            try {
-                const collectionCount = await readContract(config, {
-                    address: address,
-                    abi: abi,
-                    functionName: 'getCollectionCount', // コレクションの数を取得する関数
-                });
-
-                const collectionPromises = [];
-                for (let i = 0; i < collectionCount; i++) {
-                    collectionPromises.push(
-                        readContract(config, {
-                            address: address,
-                            abi: abi,
-                            functionName: 'getCollection', // コレクションの詳細を取得する関数
-                            args: [i], // コレクションのインデックス
-                        })
-                    );
-                }
-
-                const collectionsData = await Promise.all(collectionPromises);
-                setCollections(collectionsData.reverse()); // 新しいものが上に来るように逆順にする
-            } catch (error) {
-                console.error('Error fetching collections:', error);
-            }
-        }
-
-        fetchCollections();
-    }, []);
+    const { address: userAddress } = useAccount(); // ユーザーのアドレスを取得
 
     const onOpenModal = () => {
         setOpen(true);
@@ -74,8 +54,8 @@ const Custom = () => {
 
         try {
             const tx = await writeContract(config, {
-                address: address,
-                abi: abi,
+                address: factoryAddress,
+                abi: factoryABI,
                 functionName: 'createNFTContract',
                 args: [collectionName, symbolName, choice],
             });
@@ -167,7 +147,7 @@ const Custom = () => {
                             {collections.map((collection, index) => (
                                 <div key={index} className={styles.collectionCard}>
                                     <h3>{collection.name}</h3>
-                                    <p>{collection.symbol}</p>
+                                    <p>シンボル: {collection.symbol}</p>
                                     <p>タイプ: {collection.fileType}</p>
                                     <p>コントラクトアドレス: {collection.address}</p>
                                 </div>

@@ -64,6 +64,24 @@ export const abi =[
 				"internalType": "address",
 				"name": "contractAddress",
 				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "symbol",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "fileType",
+				"type": "string"
 			}
 		],
 		"name": "NFTContractCreated",
@@ -123,4 +141,4 @@ export const abi =[
 	}
 ]
 
-export const address = '0x9f0AF9FAc6f9b97d0F6B0E70aa757bcc793772d0';
+export const address = '0x8cdA431cD191572ffebaA81a1D582fAe34D251f4';
