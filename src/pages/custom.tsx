@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { readContract } from '@wagmi/core';
 import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
-import { useAccount } from 'wagmi'; // useAccount フックをインポート
+import { useAccount, usePublicClient } from 'wagmi';
 import { config } from '../wagmi';
 import { abi as factoryABI, address as factoryAddress} from '../abi/factoryABI';
-import { abi as nftABI } from '../abi/nftABI';
 import { Modal } from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import styles from '../styles/custom.module.css';
+import { Log } from 'viem';
 
 interface Collection {
     name: string;
@@ -26,17 +25,18 @@ const Custom = () => {
     const [error, setError] = useState('');
     const [isSendingTx, setIsSendingTx] = useState(false);
 
-    const { address: userAddress } = useAccount(); // ユーザーのアドレスを取得
+    const { address: userAddress } = useAccount();
+    const publicClient = usePublicClient();
 
     const onOpenModal = () => {
         setOpen(true);
-        setError(''); // モーダルが開かれたときにエラーメッセージをクリア
+        setError('');
     };
 
     const onCloseModal = () => {
         setOpen(false);
-        setError(''); // モーダルが閉じられたときにエラーメッセージをクリア
-        setCollectionName(''); // 入力フィールドもクリア
+        setError('');
+        setCollectionName('');
         setSymbolName('');
         setChoice('');
     };
@@ -64,6 +64,7 @@ const Custom = () => {
             });
             console.log('Transaction receipt:', receipt);
             onCloseModal();
+            fetchEventLogs(); // コレクション作成後、イベントログを再取得
         } catch (error) {
             console.error('Error minting contract:', error);
             setError('コントラクト作成に失敗しました。');
@@ -71,6 +72,50 @@ const Custom = () => {
             setIsSendingTx(false);
         }
     }
+
+    const fetchEventLogs = async () => {
+        if (!publicClient || !userAddress) return;
+
+        try {
+            const nftContractCreatedEvent = factoryABI.find(x => x.name === 'NFTContractCreated' && x.type === 'event');
+            if (!nftContractCreatedEvent) {
+                throw new Error('NFTContractCreated event not found in ABI');
+            }
+
+            const logs = await publicClient.getLogs({
+                address: factoryAddress,
+                event: nftContractCreatedEvent,
+                fromBlock: BigInt(0),
+                toBlock: 'latest',
+                args: {
+                    creator: userAddress
+                }
+            });
+
+            const fetchedCollections = logs.map((log: Log) => {
+                const { name, symbol, fileType, contractAddress } = log.args as {
+                    name: string;
+                    symbol: string;
+                    fileType: string;
+                    contractAddress: string;
+                };
+                return {
+                    name,
+                    symbol,
+                    fileType,
+                    address: contractAddress,
+                };
+            });
+
+            setCollections(fetchedCollections);
+        } catch (error) {
+            console.error('Error fetching logs:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchEventLogs();
+    }, [publicClient, userAddress]);
 
     return (
         <div className={styles.container}>
@@ -126,11 +171,11 @@ const Custom = () => {
                                     <input
                                         type="radio"
                                         name="choice"
-                                        value="css"
-                                        checked={choice === 'css'}
+                                        value="svg"
+                                        checked={choice === 'svg'}
                                         onChange={(e) => setChoice(e.target.value)}
                                     />
-                                    CSS
+                                    SVG
                                 </label>
                             </div>
 
