@@ -3,17 +3,18 @@ import Head from 'next/head';
 import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
 import { useAccount, usePublicClient } from 'wagmi';
 import { config } from '../wagmi';
-import { abi as factoryABI, address as factoryAddress} from '../abi/factoryABI';
+import { abi as factoryABI, address as factoryAddress } from '../abi/factoryABI';
 import { Modal } from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import styles from '../styles/custom.module.css';
 import { Log } from 'viem';
+import { publicClient } from './client';
 
 interface Collection {
     name: string;
     symbol: string;
     fileType: string;
-    address: string;
+    address: `0x${string}`;
 }
 
 const Custom = () => {
@@ -24,6 +25,8 @@ const Custom = () => {
     const [choice, setChoice] = useState('');
     const [error, setError] = useState('');
     const [isSendingTx, setIsSendingTx] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
     const { address: userAddress } = useAccount();
     const publicClient = usePublicClient();
@@ -74,46 +77,73 @@ const Custom = () => {
     }
 
     const fetchEventLogs = async () => {
-        if (!publicClient || !userAddress) return;
+        setIsLoading(true);
+        setError('');
+        setSuccessMessage('');
+        console.log("fetchEventLogs called");
+
+        if (!publicClient || !userAddress) {
+            console.log("publicClient or userAddress is missing", { publicClient, userAddress }); // デバッグログ
+            return;
+        }
 
         try {
-            const nftContractCreatedEvent = factoryABI.find(x => x.name === 'NFTContractCreated' && x.type === 'event');
-            if (!nftContractCreatedEvent) {
-                throw new Error('NFTContractCreated event not found in ABI');
-            }
+            const latestBlock = await publicClient.getBlockNumber();
+            const fromBlock = BigInt(6635572); // 約1週間分のブロック
 
+            console.log("Attempting to fetch logs");
+            console.log(userAddress);
             const logs = await publicClient.getLogs({
                 address: factoryAddress,
-                event: nftContractCreatedEvent,
-                fromBlock: BigInt(0),
-                toBlock: 'latest',
-                args: {
-                    creator: userAddress
-                }
+                event: {
+                    type: 'event',
+                    name: 'NFTContractCreated',
+                    inputs: [
+                        { type: 'address', indexed: true, name: 'creator' },
+                        { type: 'address', indexed: true, name: 'contractAddress' },
+                        { type: 'string', indexed: false, name: 'name' },
+                        { type: 'string', indexed: false, name: 'symbol' },
+                        { type: 'string', indexed: false, name: 'fileType' }
+                    ],
+                    args: {
+                        creator: userAddress
+                    },
+                },
+                fromBlock: fromBlock,
+                toBlock: latestBlock,
             });
 
-            const fetchedCollections = logs.map((log: Log) => {
-                const { name, symbol, fileType, contractAddress } = log.args as {
-                    name: string;
-                    symbol: string;
-                    fileType: string;
-                    contractAddress: string;
-                };
-                return {
-                    name,
-                    symbol,
-                    fileType,
-                    address: contractAddress,
-                };
-            });
+            console.log("Logs fetched:", logs); // デバッグログ
 
-            setCollections(fetchedCollections);
+            if (logs.length === 0) {
+                console.log("No logs found");
+                setSuccessMessage('コレクションはまだありません。新しく作成してみましょう！');
+            } else {
+                const fetchedCollections = logs.map(log => {
+                    const contractAddress = log.args.contractAddress;
+                    if (typeof contractAddress !== 'string' || !contractAddress.startsWith('0x')) {
+                        throw new Error('Invalid contract address format');
+                    }
+                    return {
+                        name: log.args.name ?? 'Unknown Name',
+                        symbol: log.args.symbol ?? 'Unknown Symbol',
+                        fileType: log.args.fileType ?? 'Unknown Type',
+                        address: contractAddress as `0x${string}`,
+                    };
+                });
+                setCollections(fetchedCollections);
+                setSuccessMessage(`${fetchedCollections.length}個のコレクションが見つかりました。`);
+            }
         } catch (error) {
             console.error('Error fetching logs:', error);
+            setError('コレクションの取得中にエラーが発生しました。');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
+        console.log("useEffect triggered", { publicClient, userAddress }); // デバッグログ
         fetchEventLogs();
     }, [publicClient, userAddress]);
 
@@ -187,6 +217,10 @@ const Custom = () => {
                         </form>
                     </Modal>
 
+                    {isLoading && <p>コレクションを取得中...</p>}
+                    {error && <p className={styles.errorMessage}>{error}</p>}
+                    {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
+
                     {collections.length > 0 ? (
                         <div className={styles.collectionsGrid}>
                             {collections.map((collection, index) => (
@@ -194,13 +228,12 @@ const Custom = () => {
                                     <h3>{collection.name}</h3>
                                     <p>シンボル: {collection.symbol}</p>
                                     <p>タイプ: {collection.fileType}</p>
-                                    <p>コントラクトアドレス: {collection.address}</p>
                                 </div>
                             ))}
                         </div>
                     ) : (
                         <p className={styles.noCollections}>
-                            まだコレクションがありません。新しいコレクションを作成しましょう！
+                            {successMessage || 'まだコレクションがありません。新しいコレクションを作成しましょう！'}
                         </p>
                     )}
                 </div>
