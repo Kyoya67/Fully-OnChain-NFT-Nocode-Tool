@@ -1,29 +1,53 @@
-This is a [RainbowKit](https://rainbowkit.com) + [wagmi](https://wagmi.sh) + [Next.js](https://nextjs.org/) project bootstrapped with [`create-rainbowkit`](/packages/create-rainbowkit).
+# フルオンチェーンNFT Nocode Tool
 
-## Getting Started
+このプロジェクトは、技術的な知識がなくてもフルオンチェーンNFTを作成できるNocode Toolです。HTMLやSVGを使用してNFTを作成し、イーサリアムブロックチェーン上に直接保存することができます。
 
-First, run the development server:
+## 特徴
 
-```bash
-npm run dev
-```
+- HTMLまたはSVGを使用したNFT作成
+- ブラウザ内でのリアルタイムプレビュー
+- ワンクリックでのNFTミント
+- OpenSeaとの統合
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 使い方
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+1. **ウォレットの接続**
+   - ページ上部の「ウォレットを接続」ボタンをクリックして、MetaMaskなどのイーサリアムウォレットを接続します。
 
-## Learn More
+2. **新しいコレクションの作成**
+   - 「コレクション作成」ボタンをクリックします。
+   - コレクション名、シンボル、ファイルタイプ（HTMLまたはSVG）を入力します。
+   - 「作成」をクリックしてコレクションを作成します。
 
-To learn more about this stack, take a look at the following resources:
+3. **NFTのデザイン**
+   - 左側のエディターにHTMLまたはSVGコードを入力します。
+   - 右側のプレビューウィンドウでリアルタイムに結果を確認できます。
 
-- [RainbowKit Documentation](https://rainbowkit.com) - Learn how to customize your wallet connection flow.
-- [wagmi Documentation](https://wagmi.sh) - Learn how to interact with Ethereum.
-- [Next.js Documentation](https://nextjs.org/docs) - Learn how to build a Next.js application.
+4. **NFTのミント**
+   - デザインが完成したら、「ミントする」ボタンをクリックします。
+   - NFTのタイトルと詳細を入力します。
+   - 「ミント」ボタンをクリックしてNFTを作成します。
 
-You can check out [the RainbowKit GitHub repository](https://github.com/rainbow-me/rainbowkit) - your feedback and contributions are welcome!
+5. **OpenSeaでの確認**
+   - ミントが完了すると、OpenSeaのリンクが表示されます。
+   - リンクをクリックして、作成されたNFTをOpenSeaで確認できます。
 
-## Deploy on Vercel
+## 技術的詳細
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Next.js と React を使用したフロントエンド
+- Ethers.js を使用したブロックチェーンとの対話
+- AceEditor を使用したコードエディター
+- React-Toastify を使用した通知システム
 
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 注意事項
+
+- このツールはテストネット（Sepolia）上で動作します。実際の資産を使用する前に十分注意してください。
+- ガス代（トランザクション手数料）が必要です。十分なETHがウォレットにあることを確認してください。
+
+## サポート
+
+問題や質問がある場合は、Issueを作成してください。
+
+## ライセンス
+
+このプロジェクトは [MIT ライセンス](LICENSE) の下で公開されています。
