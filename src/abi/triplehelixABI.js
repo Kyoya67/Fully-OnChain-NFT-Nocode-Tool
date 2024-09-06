@@ -274,6 +274,35 @@ export const abi = [
 		"inputs": [
 			{
 				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "Colors",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "col1",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "col2",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "col3",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
 				"name": "tokenId",
 				"type": "uint256"
 			}
@@ -430,4 +459,4 @@ export const abi = [
 	}
 ];
   
-  export const address = '0x9b513fD1Ea579aC2214Cf3db6F5B3E40b9D77630';
+  export const address = '0xA561F71319bB339422Fa45455c10eEd684D09085';

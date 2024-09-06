@@ -10,9 +10,11 @@
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.1.5",
     "@tanstack/react-query": "^5.52.2",
+    "ace-builds": "^1.36.2",
     "ethers": "^6.13.2",
     "next": "^14.2.3",
     "react": "^18.3.0",
+    "react-ace": "^12.0.0",
     "react-dom": "^18.3.0",
     "react-p5": "^1.4.1",
     "react-p5-wrapper": "^4.1.2",

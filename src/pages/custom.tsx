@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useAccount } from 'wagmi';
 import { Modal } from 'react-responsive-modal';
+import { useNFTOperations } from '../hooks/useNFTOperations';
 import 'react-responsive-modal/styles.css';
 import styles from '../styles/custom.module.css';
-import { useNFTOperations } from '../hooks/useNFTOperations';
 
 interface Collection {
     name: string;
@@ -127,11 +128,25 @@ const Custom = () => {
                         collections.length > 0 ? (
                             <div className={styles.collectionsGrid}>
                                 {collections.map((collection, index) => (
-                                    <div key={index} className={styles.collectionCard}>
-                                        <h3>{collection.name}</h3>
-                                        <p>シンボル: {collection.symbol}</p>
-                                        <p>タイプ: {collection.fileType}</p>
-                                    </div>
+                                    <Link
+                                        key={index}
+                                        href={{
+                                            pathname: '/customMint',
+                                            query: {
+                                                name: collection.name,
+                                                symbol: collection.symbol,
+                                                fileType: collection.fileType,
+                                                address: collection.address
+                                            }
+                                        }}
+                                        className={styles.collectionLink}
+                                    >
+                                        <div key={index} className={styles.collectionCard}>
+                                            <h3>{collection.name}</h3>
+                                            <p>シンボル: {collection.symbol}</p>
+                                            <p>タイプ: {collection.fileType}</p>
+                                        </div>
+                                    </Link>
                                 ))}
                             </div>
                         ) : (

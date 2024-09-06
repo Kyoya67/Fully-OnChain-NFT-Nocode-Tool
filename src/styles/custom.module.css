@@ -31,7 +31,7 @@
   border-radius: 5px;
   cursor: pointer;
   margin-bottom: 2rem;
-  transition: transform 0.4s, box-shadow 0.4s;
+  transition: 0.4s;
 }
 
 .createButton:hover {
@@ -41,7 +41,7 @@
 
 .collectionsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 2rem;
 }
 
