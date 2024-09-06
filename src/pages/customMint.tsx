@@ -106,7 +106,11 @@ const CustomMint: React.FC = () => {
   };
 
   const getOpenSeaCollectionUrl = (contractAddress: string) => {
-    return `https://testnets.opensea.io/collection/${name?.toLowerCase().replace(/\s+/g, '-')}`;
+    if (typeof name === 'string') {
+      return `https://testnets.opensea.io/collection/${name.toLowerCase().replace(/\s+/g, '-')}`;
+    }
+    // nameが文字列でない場合のフォールバック
+    return `https://testnets.opensea.io/assets/sepolia/${contractAddress}`;
   };
 
   return (
