@@ -1,4 +1,4 @@
-export const abi =[
+export const abi = [
 	{
 		"inputs": [
 			{
@@ -139,6 +139,6 @@ export const abi =[
 		"stateMutability": "view",
 		"type": "function"
 	}
-]
+];
 
-export const address = '0x5D9AE9b7E47803088EB5E2b618AdA1BE582EAA83';
+export const address = '0x3f57b5EAC63a5810156DA8632685C40fAa5901e7';
