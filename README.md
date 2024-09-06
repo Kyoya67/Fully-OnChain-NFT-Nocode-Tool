@@ -51,32 +51,42 @@
    - 右側のプレビューウィンドウでリアルタイムに結果を確認できます。
    - デザインが完成したら、「ミントする」ボタンをクリックします。
 
-<img width="413" alt="スクリーンショット 2024-09-06 13 54 08" src="https://github.com/user-attachments/assets/9d5b5921-979d-4b90-93d3-5b81de0a472a">
+<img width="1512" alt="スクリーンショット 2024-09-06 14 27 10" src="https://github.com/user-attachments/assets/8ede0303-c23e-4a4a-bb82-02c06bde0a48">
 
 4. **NFTのミント**
    - NFTのタイトルと詳細を入力します。
    - 「ミント」ボタンをクリックしてNFTを作成します。
-  
-<img width="431" alt="スクリーンショット 2024-09-06 13 54 49" src="https://github.com/user-attachments/assets/b33d3958-9643-4676-a44f-05ccd0c82a15">
+
+<img width="1512" alt="スクリーンショット 2024-09-06 14 27 35" src="https://github.com/user-attachments/assets/01134b8a-09f1-4ac5-a155-2a7bbc9c28d3">
 
 5. **ミント完了とOpenSeaリンク**
    - ミントが完了すると、画面右下にトースト通知が表示されます。
    - 通知には「NFTが作成されました！」というメッセージと共に、OpenSeaで確認するためのリンクが含まれています。
+
+<img width="1512" alt="スクリーンショット 2024-09-06 14 27 52" src="https://github.com/user-attachments/assets/0703bcce-0f45-4880-87ab-3670525203e5">
+
+6. **OpenSeaでの確認**
    - このリンクをクリックすると、作成したNFTをOpenSea上で直接確認することができます。
 
 ### テンプレートNFT作成の手順
 
+<img width="1173" alt="スクリーンショット 2024-09-06 14 31 04" src="https://github.com/user-attachments/assets/a5d8cbf2-45b6-4424-a3f7-98a88e62997a">
+
 1. **テンプレートの選択**
    - 利用可能なテンプレートから好みのものを選択します。
+
+<img width="1178" alt="スクリーンショット 2024-09-06 14 31 34" src="https://github.com/user-attachments/assets/1fc72e0e-975f-4c1e-9045-d33407f067dc">
 
 2. **カスタマイズ**
    - 色や特徴などのオプションを選択してNFTをカスタマイズします。
    - プレビューでリアルタイムに変更を確認できます。
 
+<img width="1177" alt="スクリーンショット 2024-09-06 14 32 03" src="https://github.com/user-attachments/assets/4e3fb503-7643-4311-a0ea-dbad580551cb">
+
 3. **NFTのミント**
-   - カスタマイズが完了したら、「ミントする」ボタンをクリックします。
-   - 必要に応じて追加情報を入力します。
-   - 「ミント」ボタンをクリックしてNFTを作成します。
+   - 「Generate NFT」ボタンをクリックしてNFTを作成します。
+
+<img width="1107" alt="スクリーンショット 2024-09-06 14 33 30" src="https://github.com/user-attachments/assets/ccc36a34-4c47-45e1-a478-01d51d95c42c">
 
 4. **OpenSeaでの確認**
    - ミントが完了すると、OpenSeaのリンクが表示されます。
@@ -85,9 +95,11 @@
 ## 技術的詳細
 
 - Next.js と React を使用したフロントエンド
-- Ethers.js を使用したブロックチェーンとの対話
+- wagmi.js を使用したブロックチェーンとの対話
 - AceEditor を使用したコードエディター
 - React-Toastify を使用した通知システム
+- solidityを使用したスマートコントラクト作成
+- rainbowKitを使ったウォレット接続
 
 ## 注意事項
 
