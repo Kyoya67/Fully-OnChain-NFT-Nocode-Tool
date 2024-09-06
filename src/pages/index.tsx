@@ -42,6 +42,11 @@ const Home = () => {
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Noto+Sans+JP:wght@100..900&family=Shippori+Antique&display=swap" rel="stylesheet" />
+        <meta property="og:title" content="フルオンチェーンNFT Nocode Tool" />
+        <meta property="og:description" content="技術的な知識がなくてもフルオンチェーンNFTを作成できるNocode Tool" />
+        <meta property="og:image" content="../../public/ogp.png" />
+        <meta property="og:url" content="https://fully-on-chain-nft-nocode-tool.vercel.app/" />
+        <meta property="og:type" content="website" />
       </Head>
 
       <Header />
